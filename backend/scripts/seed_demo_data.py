@@ -296,9 +296,9 @@ P2P_SBI = [
     ("PRIYA NAIR", "HDFC", "priya.nair92@upi"),
 ]
 P2P_SLICE = [
-    ("Manjunath S", "manjunath.s88@slc"),
-    ("Nandini Milk Parlour", "nandiniparlour.kmg@ybl"),
-    ("Sri Ganesh Tea Stall", "q482913775@ybl"),
+    ("Deepak S", "deepak.s88@slc"),
+    ("Nandini Milk Parlour", "nandiniparlour@ybl"),
+    ("Sri Ganesh Tea Stall", "q000000001@ybl"),
     ("Imran Khan", "imran.k1990@upi"),
 ]
 
