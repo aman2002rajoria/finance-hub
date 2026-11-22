@@ -149,6 +149,6 @@ The public site runs as two Vercel projects from this repository, and both only 
 | Project | Root Directory | What it is |
 | --- | --- | --- |
 | `finance-hub-api` | `backend` | The FastAPI backend. On Vercel it builds the test data in a temp folder on first start (`seed_demo_data.py`), and uploads and clearing data are turned off. |
-| `finance-hub` | `frontend` | The website. `frontend/.env.production` locks it to test data and points it at `https://finance-hub-api.vercel.app`. |
+| `finance-hub` | `frontend` | The website. `frontend/.env.production` locks it to test data and points it at `https://finance-hub-api-two.vercel.app`. |
 
 If the backend ends up at another address, change `NEXT_PUBLIC_DEMO_API_URL` in `frontend/.env.production` (or set it in the Vercel project's environment variables). No keys or secrets are needed. Your own `finance.db` and statements are never part of the repository.
