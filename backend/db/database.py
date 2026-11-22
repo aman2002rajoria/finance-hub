@@ -26,6 +26,16 @@ from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
 _BACKEND = os.path.dirname(_HERE)
+
+# Public demo (on Vercel, or FINANCE_PUBLIC_DEMO=1): only the made-up test data, kept in
+# the temp folder because that is the only writable place on Vercel. It is rebuilt from
+# scripts/seed_demo_data.py the first time the server starts.
+PUBLIC_DEMO = bool(os.environ.get("VERCEL")) or os.environ.get("FINANCE_PUBLIC_DEMO") == "1"
+if PUBLIC_DEMO:
+    import tempfile
+    os.environ["FINANCE_DEMO"] = "1"
+    os.environ["FINANCE_DB_PATH"] = os.path.join(tempfile.gettempdir(), "finance-hub", "demo.db")
+
 DB_PATH = os.environ.get(
     "FINANCE_DB_PATH",
     os.path.join(_BACKEND, "data", "finance.db"),

@@ -13,3 +13,6 @@ node_modules/
 backend/.venv/
 __pycache__/
 .DS_Store
+
+# Public settings for the Vercel site (no secrets in it)
+!frontend/.env.production

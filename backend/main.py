@@ -37,7 +37,7 @@ from api.routes_rules import router as rules_router
 from api.routes_system import router as system_router
 from api.routes_transactions import router as transactions_router
 from api.routes_upload import router as upload_router
-from db.database import init_db
+from db.database import DB_PATH, PUBLIC_DEMO, init_db
 
 
 logging.basicConfig(
@@ -52,6 +52,47 @@ logger = logging.getLogger("finance-hub")
 # ---------------------------------------------------------------------------
 
 
+# ---------------------------------------------------------------------------
+# Public demo: made-up data only, built on first start; uploads are off
+# ---------------------------------------------------------------------------
+
+import threading
+
+_seed_lock = threading.Lock()
+_seeded = False
+
+
+def _ensure_demo_data() -> None:
+    """In the public demo, build the test data once per server instance."""
+    global _seeded
+    if not PUBLIC_DEMO or _seeded:
+        return
+    with _seed_lock:
+        if _seeded:
+            return
+        import importlib.util
+        from sqlalchemy import func, select
+        from db.database import SessionLocal
+        from db.models import Transaction
+
+        init_db()
+        with SessionLocal() as s:
+            has_rows = (s.execute(select(func.count()).select_from(Transaction)).scalar() or 0) > 0
+        if not has_rows:
+            spec = importlib.util.spec_from_file_location(
+                "seed_demo_data", os.path.join(_HERE, "scripts", "seed_demo_data.py"))
+            mod = importlib.util.module_from_spec(spec)
+            sys.modules["seed_demo_data"] = mod  # dataclasses look the module up here
+            spec.loader.exec_module(mod)
+            mod.main(DB_PATH, verbose=False)
+            logger.info("Public demo: test data built at %s", DB_PATH)
+        _seeded = True
+
+
+# Anything that would bring outside data into the public demo is turned off.
+_DEMO_BLOCKED = ("/api/upload", "/api/blinkit/scan", "/api/blinkit/upload", "/api/blinkit/reprocess")
+
+
 @asynccontextmanager
 async def _lifespan(_app: FastAPI):
     """Create tables on startup (idempotent).
@@ -61,6 +102,7 @@ async def _lifespan(_app: FastAPI):
     :class:`TestClient` as well as production uvicorn.
     """
     init_db()
+    _ensure_demo_data()
     logger.info("DB initialised; routes ready")
     yield
 
@@ -83,6 +125,20 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+@app.middleware("http")
+async def _public_demo_guard(request: Request, call_next):
+    if PUBLIC_DEMO:
+        path = request.url.path
+        if request.method != "GET" and (path.startswith(_DEMO_BLOCKED) or path == "/api/system/reset"):
+            return JSONResponse(
+                status_code=403,
+                content={"detail": "This is a public demo with made-up data, so uploads and clearing data are turned off."},
+            )
+        # Some hosts don't run the startup hook, so make sure the test data exists.
+        _ensure_demo_data()
+    return await call_next(request)
 
 
 @app.exception_handler(Exception)
