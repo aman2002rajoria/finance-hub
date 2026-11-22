@@ -1,0 +1,202 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Finance Hub tokens (design.md §3, §22). Colours are "R G B" channels so
+ * Tailwind can apply opacity; the plain `--x` vars are ready-made colours
+ * for raw CSS. Light is the default; dark follows design.md §3.5.
+ */
+:root {
+  color-scheme: light;
+  --font: var(--font-fira), system-ui, sans-serif;
+  --mono: var(--font-mono), ui-monospace, monospace;
+
+  --c-bg: 250 250 251; --c-card: 255 255 255; --c-surface: 246 246 248; --c-surface-2: 238 238 242;
+  --c-line: 236 236 239; --c-ink: 29 29 31; --c-ink-2: 72 72 79; --c-muted: 118 118 126; --c-faint: 161 161 168;
+
+  --c-accent-50: 232 251 242; --c-accent-100: 201 245 224; --c-accent-200: 143 233 192;
+  --c-accent-500: 0 184 107; --c-accent-600: 0 154 89; --c-accent-700: 0 117 69; --c-accent-900: 0 61 36;
+
+  --c-success: 24 201 100; --c-success-text: 14 122 61; --c-success-tint: 232 250 240;
+  --c-warning: 255 176 32; --c-warning-text: 138 90 0;  --c-warning-tint: 255 246 214;
+  --c-danger: 240 68 58;   --c-danger-text: 179 38 30;  --c-danger-tint: 253 236 235;
+
+  /* Dark (default) button: ink fill, white label, black lip. */
+  --btn-bg: rgb(var(--c-ink)); --btn-fg: #fff; --btn-lip: #000; --btn-glow: rgba(0,0,0,.45);
+  --topbar: rgb(255 255 255 / .86);
+  --shadow-ink: rgba(0,0,0,.18);
+
+  --r-s: 12px; --r-m: 20px; --r-l: 28px; --r-xl: 32px; --r-pill: 999px;
+  --spring: linear(0,.096 4.4%,.355 9.5%,.705 16.1%,.877 20.3%,1.004 24.7%,1.074 29.1%,1.098 33.6%,1.09 38.6%,1.035 49.7%,1.003 60.7%,.996 72.1%,1);
+  --soft: cubic-bezier(.22,1,.36,1);
+  --gutter: clamp(20px, 4vw, 48px);
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+  --c-bg: 14 14 17; --c-card: 22 22 27; --c-surface: 29 29 35; --c-surface-2: 42 42 50;
+  --c-line: 38 38 45; --c-ink: 243 243 245; --c-ink-2: 194 194 202; --c-muted: 141 141 151; --c-faint: 106 106 115;
+
+  /* Accent 500/600 stay; tints go deep; accent TEXT (700/900) uses the light 200/100 steps (§3.5). */
+  --c-accent-50: 15 42 30; --c-accent-100: 19 58 41; --c-accent-200: 30 107 73;
+  --c-accent-700: 143 233 192; --c-accent-900: 201 245 224;
+
+  --c-success-text: 91 212 138; --c-success-tint: 16 41 27;
+  --c-warning-text: 255 197 85; --c-warning-tint: 46 37 16;
+  --c-danger-text: 255 122 114; --c-danger-tint: 50 22 21;
+
+  --btn-bg: rgb(var(--c-ink)); --btn-fg: rgb(var(--c-bg)); --btn-lip: rgb(141 141 151); --btn-glow: rgba(0,0,0,.6);
+  --topbar: rgb(22 22 27 / .86);
+  --shadow-ink: rgba(0,0,0,.55);
+}
+
+:root, [data-theme="dark"] {
+  --bg: rgb(var(--c-bg)); --card: rgb(var(--c-card)); --surface: rgb(var(--c-surface)); --surface-2: rgb(var(--c-surface-2));
+  --line: rgb(var(--c-line)); --ink: rgb(var(--c-ink)); --ink-2: rgb(var(--c-ink-2)); --muted: rgb(var(--c-muted)); --faint: rgb(var(--c-faint));
+  --accent-50: rgb(var(--c-accent-50)); --accent-100: rgb(var(--c-accent-100)); --accent-200: rgb(var(--c-accent-200));
+  --accent-500: rgb(var(--c-accent-500)); --accent-600: rgb(var(--c-accent-600)); --accent-700: rgb(var(--c-accent-700)); --accent-900: rgb(var(--c-accent-900));
+  --success: rgb(var(--c-success)); --success-text: rgb(var(--c-success-text)); --success-tint: rgb(var(--c-success-tint));
+  --warning: rgb(var(--c-warning)); --warning-text: rgb(var(--c-warning-text)); --warning-tint: rgb(var(--c-warning-tint));
+  --danger: rgb(var(--c-danger)); --danger-text: rgb(var(--c-danger-text)); --danger-tint: rgb(var(--c-danger-tint));
+
+  --shadow-flat: 0 0 0 1px var(--line);
+  --shadow-float: 0 0 0 1px var(--line), 0 20px 40px -20px var(--shadow-ink);
+  --shadow-lift: 0 0 0 1px var(--line), 0 30px 60px -30px color-mix(in srgb, var(--accent-500) 45%, var(--shadow-ink));
+}
+
+html, body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection { background: var(--accent-100); color: var(--accent-900); }
+
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--surface-2); border-radius: 999px; border: 2px solid var(--bg); }
+::-webkit-scrollbar-thumb:hover { background: var(--faint); }
+
+/* Every focusable element gets the design focus ring (§18). */
+:focus-visible {
+  outline: 3px solid var(--accent-500);
+  outline-offset: 3px;
+}
+
+/* Numbers that are compared or update are tabular (§4). */
+.tabular-nums, table td, table th { font-variant-numeric: tabular-nums; }
+
+/* Recharts: quiet axes and gridlines (§10). */
+.recharts-wrapper text { fill: var(--faint); font-size: 12px; font-family: var(--font); }
+.recharts-cartesian-grid line { stroke: var(--line); }
+.recharts-tooltip-cursor { fill: var(--surface); }
+.recharts-wrapper:focus, .recharts-surface:focus { outline: none; }
+
+table tr.row-hover:hover { background: var(--surface); }
+
+@layer components {
+  .page-shell {
+    margin-inline: auto;
+    width: 100%;
+    max-width: calc(1320px + 2 * var(--gutter));
+    padding-inline: var(--gutter);
+  }
+
+  .dashboard-grid { @apply grid grid-cols-1 gap-4; }
+  @media (min-width: 900px) { .dashboard-grid { @apply grid-cols-12 gap-4; } }
+
+  .surface-hover { @apply transition-colors duration-200 hover:bg-surface; }
+
+  /* ---- The 3D lip button (design.md §6) -------------------------------- */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+    padding: 14px 22px; border-radius: 999px; white-space: nowrap;
+    font: 600 16px/1 var(--font);
+    background: var(--btn-bg); color: var(--btn-fg);
+    box-shadow: 0 4px 0 var(--btn-lip), 0 12px 24px -12px var(--btn-glow);
+    transition: transform .4s var(--spring), box-shadow .4s var(--spring), opacity .2s;
+    cursor: pointer;
+    margin-bottom: 4px; /* room for the lip */
+  }
+  .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 0 var(--btn-lip), 0 16px 28px -12px var(--btn-glow); }
+  .btn:active { transform: translateY(4px); box-shadow: 0 0 0 var(--btn-lip); transition-duration: .08s; }
+  .btn:focus-visible { outline: 3px solid var(--accent-500); outline-offset: 3px; }
+
+  .btn.primary {
+    background: var(--accent-600); color: #fff;
+    box-shadow: 0 4px 0 color-mix(in srgb, var(--accent-600) 65%, #000), 0 12px 24px -12px var(--accent-500);
+  }
+  .btn.primary:hover { box-shadow: 0 6px 0 color-mix(in srgb, var(--accent-600) 65%, #000), 0 16px 28px -12px var(--accent-500); }
+  .btn.primary:active { box-shadow: 0 0 0 transparent; }
+
+  .btn.ghost {
+    background: var(--card); color: var(--ink);
+    box-shadow: inset 0 0 0 1.5px var(--surface-2), 0 4px 0 var(--surface-2);
+  }
+  .btn.ghost:hover { box-shadow: inset 0 0 0 1.5px var(--surface-2), 0 6px 0 var(--surface-2); }
+  .btn.ghost:active { box-shadow: inset 0 0 0 1.5px var(--surface-2), 0 0 0 var(--surface-2); }
+
+  .btn.danger { background: var(--danger); color: #fff; box-shadow: 0 4px 0 var(--danger-text); }
+  .btn.danger:hover { box-shadow: 0 6px 0 var(--danger-text); }
+  .btn.danger:active { box-shadow: 0 0 0 var(--danger-text); }
+
+  .btn.sm { padding: 10px 16px; font-size: 14px; gap: 8px; }
+  .btn.xs { padding: 7px 12px; font-size: 13px; gap: 6px; margin-bottom: 3px; }
+  .btn.icon { padding: 0; width: 40px; height: 40px; }
+  .btn.icon.sm { width: 34px; height: 34px; }
+
+  .btn:disabled, .btn[aria-disabled="true"] { opacity: .5; pointer-events: none; }
+
+  /* Inline text action in accent 700 (§6). */
+  .text-link { color: var(--accent-700); font-weight: 600; transition: color .2s; cursor: pointer; }
+  .text-link:hover { color: var(--accent-900); text-decoration: underline; text-underline-offset: 3px; }
+
+  /* Skeleton shimmer (§15). */
+  .skeleton {
+    background: linear-gradient(90deg, var(--surface) 0%, var(--surface-2) 50%, var(--surface) 100%);
+    background-size: 200% 100%;
+    animation: skeleton-shimmer 1.6s ease-in-out infinite;
+    border-radius: 12px;
+  }
+}
+
+@layer utilities {
+  .focus-ring { outline: 3px solid var(--accent-500); outline-offset: 3px; }
+  .eyebrow { font-size: 12px; line-height: 1.2; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+}
+
+@keyframes skeleton-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+@keyframes ai-dot {
+  0%, 80%, 100% { opacity: .25; transform: translateY(0); }
+  40% { opacity: 1; transform: translateY(-2px); }
+}
+.ai-dots { display: inline-flex; gap: 4px; align-items: center; }
+.ai-dots span { display: inline-block; width: 6px; height: 6px; border-radius: 999px; background: var(--accent-500); animation: ai-dot 1.2s infinite; }
+.ai-dots span:nth-child(2) { animation-delay: .15s; }
+.ai-dots span:nth-child(3) { animation-delay: .3s; }
+
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.rise-in { animation: rise-in .6s var(--soft) both; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-property: opacity !important;
+    scroll-behavior: auto !important;
+  }
+  .btn:hover, .btn:active { transform: none; }
+  .skeleton { animation: none; }
+}

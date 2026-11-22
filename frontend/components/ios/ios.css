@@ -1,0 +1,125 @@
+/*
+ * iOS showcase: scoped tokens for the phone screens and the Figma-like board.
+ * Phones carry their own theme (.ios-light / .ios-dark) so both rows can sit
+ * on one page whatever the app theme is.
+ */
+
+.ios-screen {
+  --sf: -apple-system, "SF Pro Text", "SF Pro", BlinkMacSystemFont, "Helvetica Neue", system-ui, sans-serif;
+  --sfd: -apple-system, "SF Pro Display", "SF Pro", BlinkMacSystemFont, "Helvetica Neue", system-ui, sans-serif;
+  --brand: var(--font-fira), "Fira Sans", system-ui, sans-serif;
+  font-family: var(--sf);
+  font-size: 17px;
+  line-height: 22px;
+  letter-spacing: -0.41px;
+  -webkit-font-smoothing: antialiased;
+  font-variant-numeric: tabular-nums;
+  color: var(--l1);
+  background: var(--grouped);
+}
+
+.ios-light {
+  --grouped: #F2F2F7;
+  --plain: #FFFFFF;
+  --cell: #FFFFFF;
+  --cell-2: #F2F2F7;
+  --l1: #1D1D1F;
+  --l2: rgba(60, 60, 67, 0.62);
+  --l3: rgba(60, 60, 67, 0.32);
+  --sep: rgba(60, 60, 67, 0.16);
+  --fill: rgba(118, 118, 128, 0.12);
+  --fill-2: rgba(118, 118, 128, 0.2);
+  --tint: #009A59;           /* accent 600: text-safe on white */
+  --tint-fill: #00B86B;      /* accent 500: charts, glyphs */
+  --tint-soft: #E8FBF2;
+  --tint-ink: #007545;
+  --pos: #0E7A3D;
+  --neg: #B3261E;
+  --warn: #8A5A00;
+  --warn-soft: #FFF6D6;
+  --neg-soft: #FDECEB;
+  --pos-soft: #E8FAF0;
+  --bar: rgba(249, 249, 249, 0.86);
+  --bar-line: rgba(0, 0, 0, 0.14);
+  --chart-grid: rgba(60, 60, 67, 0.1);
+  --chart-area: rgba(0, 184, 107, 0.14);
+  --lip: #007545;
+  --scrim: rgba(0, 0, 0, 0.32);
+  --home: #1D1D1F;
+  --shadow-card: 0 0 0 0.5px rgba(0, 0, 0, 0.04);
+}
+
+.ios-dark {
+  --grouped: #000000;
+  --plain: #000000;
+  --cell: #1C1C1E;
+  --cell-2: #2C2C2E;
+  --l1: #F5F5F7;
+  --l2: rgba(235, 235, 245, 0.6);
+  --l3: rgba(235, 235, 245, 0.3);
+  --sep: rgba(84, 84, 88, 0.55);
+  --fill: rgba(118, 118, 128, 0.24);
+  --fill-2: rgba(118, 118, 128, 0.32);
+  --tint: #2FD58A;
+  --tint-fill: #00B86B;
+  --tint-soft: rgba(0, 184, 107, 0.16);
+  --tint-ink: #8FE9C0;
+  --pos: #5BD48A;
+  --neg: #FF7A72;
+  --warn: #FFC555;
+  --warn-soft: rgba(255, 176, 32, 0.16);
+  --neg-soft: rgba(240, 68, 58, 0.18);
+  --pos-soft: rgba(24, 201, 100, 0.16);
+  --bar: rgba(22, 22, 24, 0.86);
+  --bar-line: rgba(255, 255, 255, 0.12);
+  --chart-grid: rgba(235, 235, 245, 0.1);
+  --chart-area: rgba(0, 184, 107, 0.2);
+  --lip: #004D2E;
+  --scrim: rgba(0, 0, 0, 0.5);
+  --home: #FFFFFF;
+  --seg-on: #636366;
+  --shadow-card: none;
+}
+
+.ios-screen .brand { font-family: var(--brand); font-weight: 900; letter-spacing: -0.01em; }
+.ios-screen .large-title { font-family: var(--brand); font-weight: 900; font-size: 34px; line-height: 41px; letter-spacing: -0.4px; }
+.ios-screen .footnote { font-size: 13px; line-height: 18px; letter-spacing: -0.08px; }
+.ios-screen .caption { font-size: 12px; line-height: 16px; letter-spacing: 0; }
+.ios-screen .subhead { font-size: 15px; line-height: 20px; letter-spacing: -0.24px; }
+.ios-screen .callout { font-size: 16px; line-height: 21px; letter-spacing: -0.32px; }
+.ios-screen .section-h { font-size: 13px; line-height: 18px; letter-spacing: -0.08px; color: var(--l2); text-transform: uppercase; }
+.ios-screen .l2 { color: var(--l2); }
+.ios-screen .l3 { color: var(--l3); }
+.ios-screen .tint { color: var(--tint); }
+
+/* The brand lip button, sized for iOS (50pt, 4pt lip). */
+.ios-btn {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  height: 50px; border-radius: 999px; font: 600 17px/1 var(--sf); letter-spacing: -0.41px;
+  background: var(--tint-fill); color: #fff; box-shadow: 0 4px 0 var(--lip);
+}
+.ios-light .ios-btn { background: #009A59; }
+.ios-btn.ghost { background: var(--cell); color: var(--l1); box-shadow: inset 0 0 0 1.5px var(--fill-2), 0 4px 0 var(--fill-2); }
+.ios-btn.sm { height: 34px; padding: 0 14px; font-size: 15px; box-shadow: 0 3px 0 var(--lip); }
+.ios-btn.ghost.sm { box-shadow: inset 0 0 0 1.5px var(--fill-2), 0 3px 0 var(--fill-2); }
+
+/* ---------------------------------------------------- Figma-like board */
+
+.fig-board {
+  --board: #E5E5E5;
+  --label: rgba(0, 0, 0, 0.55);
+  --title: #1E1E1E;
+  --sub: rgba(0, 0, 0, 0.5);
+  --rule: rgba(0, 0, 0, 0.08);
+  background: var(--board);
+  font-family: -apple-system, "Inter", "SF Pro Text", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+.fig-board.board-dark {
+  --board: #1E1E1E;
+  --label: rgba(255, 255, 255, 0.5);
+  --title: #F5F5F5;
+  --sub: rgba(255, 255, 255, 0.5);
+  --rule: rgba(255, 255, 255, 0.08);
+}
+.fig-label { font-size: 11px; line-height: 16px; font-weight: 500; color: var(--label); letter-spacing: 0.005em; }

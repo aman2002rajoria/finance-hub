@@ -1,0 +1,7 @@
+/* Motion lab only. Option 6C: a soft accent glow while the button is held. */
+.glow.glow.glow:active {
+  box-shadow:
+    0 0 0 transparent,
+    0 0 0 5px color-mix(in srgb, var(--accent-500) 20%, transparent),
+    0 0 22px 2px color-mix(in srgb, var(--accent-500) 35%, transparent);
+}

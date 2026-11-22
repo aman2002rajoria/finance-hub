@@ -1,0 +1,15 @@
+# Your own data never goes to git
+backend/data/*.db
+backend/data/*.db-*
+backend/data/uploads/
+*.pdf
+.env
+.env.*
+
+# Build output
+node_modules/
+.next/
+*.tsbuildinfo
+backend/.venv/
+__pycache__/
+.DS_Store
