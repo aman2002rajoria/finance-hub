@@ -4,6 +4,7 @@ import { Fira_Sans, JetBrains_Mono } from "next/font/google";
 import AppShell from "@/components/AppShell";
 import { Providers } from "./providers";
 import { THEME_BOOT_SCRIPT } from "@/lib/themeScript";
+import { Analytics } from "@vercel/analytics/next";
 
 const fira = Fira_Sans({
   subsets: ["latin"],
@@ -36,6 +37,7 @@ export default function RootLayout({
         <Providers>
           <AppShell>{children}</AppShell>
         </Providers>
+        <Analytics />
       </body>
     </html>
   );
